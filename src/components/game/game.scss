@@ -1,0 +1,43 @@
+.game-main{
+  text-align: center;
+  .game-grid{
+    .grid-row{
+      display: flex;
+      justify-content: center;
+
+      .grid-item{
+        height: 30px;
+        width: 30px;
+        border: 1px solid grey;
+        font-size: 20px;
+        line-height: 30px;
+      }
+    }
+
+    .pointer{
+      cursor: pointer;
+    }
+
+    .not-allowed{
+      cursor: not-allowed;
+      background: lightgrey;
+    }
+  }
+
+  .turn-heading{
+    padding: 20px;
+    font-size: 22px;
+  }
+  .helper-text{
+    padding-bottom: 15px;
+    font-size: 18px;
+  }
+
+  .reset-button{
+    float: right;
+    padding-right: 50px;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
