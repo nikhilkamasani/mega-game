@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import * as _ from "lodash";
 
 import "./game.scss";
+import Peer from "peerjs";
 
 class Game extends Component{
   constructor(props) {
@@ -13,6 +14,22 @@ class Game extends Component{
       XWins: 0,
       OWins: 0,
     }
+  }
+
+  componentDidMount() {
+    const peer = new Peer({debug: 3 });
+    peer.on('open', id => {
+      console.log('My peer ID is: ' + id);
+
+      peer.on('connection', (conn) => {
+        conn.on('data', (data) => {
+          console.log(data);
+        });
+        conn.on('open', () => {
+          conn.send({...this.props});
+        });
+      });
+    });
   }
 
   handleCellClick = (i, j) => {
