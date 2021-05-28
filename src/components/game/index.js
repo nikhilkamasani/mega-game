@@ -10,6 +10,8 @@ class Game extends Component{
     this.state = {
       array: Array.from(Array(props.size), () => new Array(props.size)),
       presentTurn: 'X',
+      XWins: 0,
+      OWins: 0,
     }
   }
 
@@ -18,18 +20,33 @@ class Game extends Component{
     const { size } = this.props;
     const tempArray = [...array];
     tempArray[i][j] = presentTurn;
-    if(this.checkIfPlayerWins(tempArray, i, j, presentTurn)){
-      alert(`player ${presentTurn} wins!`)
+    if(this.checkForDraw(tempArray, size)){
+      alert(`Game Drawn`)
       this.setState({
         array: Array.from(Array(size), () => new Array(size)),
-        presentTurn: 'X'
+        presentTurn: 'X',
       })
+    } else if(this.checkIfPlayerWins(tempArray, i, j, presentTurn)){
+      alert(`player ${presentTurn} wins!`)
+      this.setState(prevState => ({
+        array: Array.from(Array(size), () => new Array(size)),
+        presentTurn: 'X',
+        [`${presentTurn}Wins`]: prevState[`${presentTurn}Wins`] + 1,
+      }))
     } else {
       this.setState({
         array: tempArray,
         presentTurn: presentTurn === 'X' ? 'O' : 'X'
       })
     }
+  }
+
+  checkForDraw = (array, size) => {
+    let totalFilledCells = 0;
+    array.forEach(a => {
+      totalFilledCells = totalFilledCells + [...a].filter(exists => exists).length
+    })
+    return totalFilledCells === size * size;
   }
 
   checkIfPlayerWins = (array, i, j, char) => {
@@ -84,9 +101,10 @@ class Game extends Component{
 
   render() {
     const { size, length } = this.props;
-    const { array, presentTurn } = this.state;
+    const { array, presentTurn, XWins, OWins } = this.state;
     return ( <div className="game-main">
           <div className="turn-heading">Current Turn: {presentTurn}</div>
+          <div className="turn-heading">X - {XWins} Wins, O - {OWins} Wins</div>
           <div className="reset-button" onClick={() => window.location.reload()}>Reset</div>
           <div className="helper-text">first player to get {length} of her marks in a row wins!</div>
           <div className="game-grid">
